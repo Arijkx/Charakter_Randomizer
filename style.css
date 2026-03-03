@@ -396,6 +396,10 @@ body {
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 20px;
+  margin-bottom: 16px;
+}
+
+.result-actions {
   margin-bottom: 32px;
 }
 
