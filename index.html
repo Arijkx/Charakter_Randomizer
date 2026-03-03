@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WoW Zufalls-Charakter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>Charakter Randomizer</h1>
+      <p class="subtitle">Generiert zufällige Charaktere aus dem World of Warcraft Universum</p>
+    </header>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" class="tab active" role="tab" id="tab-generator" aria-selected="true" aria-controls="panel-generator">Generieren</button>
+      <button type="button" class="tab" role="tab" id="tab-saved" aria-selected="false" aria-controls="panel-saved">Gespeicherte Charaktere</button>
+    </nav>
+
+    <main class="main">
+      <div class="tab-panel active" id="panel-generator" role="tabpanel">
+        <div class="actions">
+          <button type="button" class="btn btn-primary" id="btn-generate">Charakter würfeln</button>
+          <button type="button" class="btn btn-secondary" id="btn-settings">Voreinstellungen</button>
+          <button type="button" class="btn btn-secondary" id="btn-save" hidden>Aktuellen speichern</button>
+        </div>
+
+        <section class="result" id="result">
+          <p class="placeholder" id="placeholder">Klicke auf „Neu generieren“, um einen Charakter zu erstellen.</p>
+          <dl class="char-sheet" id="char-sheet" hidden></dl>
+        </section>
+      </div>
+
+      <div class="tab-panel" id="panel-saved" role="tabpanel">
+        <div class="saved">
+          <h2>Gespeicherte Charaktere</h2>
+          <p class="saved-empty" id="saved-empty">Noch keine gespeicherten Charaktere.</p>
+          <ul class="saved-list" id="saved-list"></ul>
+        </div>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>Footer</p>
+    </footer>
+  </div>
+
+  <div class="modal-overlay" id="settings-modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Voreinstellungen</h2>
+        <button type="button" class="modal-close" id="modal-close" aria-label="Schließen">×</button>
+      </div>
+      <nav class="modal-tabs" role="tablist">
+        <button type="button" class="modal-tab active" role="tab" id="modal-tab-vorgaben" aria-selected="true" aria-controls="modal-panel-vorgaben">Vorgaben</button>
+        <button type="button" class="modal-tab" role="tab" id="modal-tab-exclusions" aria-selected="false" aria-controls="modal-panel-exclusions">Werte ausschließen</button>
+      </nav>
+      <div class="modal-body">
+        <div class="modal-panel active" id="modal-panel-vorgaben" role="tabpanel">
+          <p class="options-hint">Wähle Werte vor, die fest sein sollen. Alles andere wird zufällig gewürfelt.</p>
+          <div class="options-grid">
+            <label for="select-fraktion">Fraktion</label>
+            <select id="select-fraktion"><option value="">— Zufällig —</option></select>
+            <label for="select-rasse">Rasse</label>
+            <select id="select-rasse"><option value="">— Zufällig —</option></select>
+            <label for="select-klasse">Klasse</label>
+            <select id="select-klasse"><option value="">— Zufällig —</option></select>
+            <label for="select-haarfarbe">Haarfarbe</label>
+            <select id="select-haarfarbe"><option value="">— Zufällig —</option></select>
+            <label for="select-geschlecht">Geschlecht</label>
+            <select id="select-geschlecht"><option value="">— Zufällig —</option></select>
+            <label for="select-waffe">Waffe</label>
+            <select id="select-waffe"><option value="">— Zufällig —</option></select>
+            <label for="select-nebenhand">Nebenhand</label>
+            <select id="select-nebenhand"><option value="">— Zufällig —</option></select>
+            <label for="select-ruestung">Rüstung</label>
+            <select id="select-ruestung"><option value="">— Zufällig —</option></select>
+            <label for="select-level">Level</label>
+            <select id="select-level"><option value="">— Zufällig —</option></select>
+            <label for="select-pose">Pose</label>
+            <select id="select-pose"><option value="">— Zufällig —</option></select>
+            <label for="select-hintergrund">Hintergrund Komplex</label>
+            <select id="select-hintergrund"><option value="">— Zufällig —</option></select>
+            <label for="select-hintergrund-simpel">Hintergrund Simpel</label>
+            <select id="select-hintergrund-simpel"><option value="">— Zufällig —</option></select>
+            <label for="select-stimmung">Stimmung</label>
+            <select id="select-stimmung"><option value="">— Zufällig —</option></select>
+          </div>
+        </div>
+        <div class="modal-panel" id="modal-panel-exclusions" role="tabpanel">
+          <p class="options-hint">Wähle einen Wert aus dem Dropdown – er wird als Badge hinzugefügt und beim Würfeln ausgeschlossen.</p>
+          <div class="exclusions-grid" id="exclusions-grid"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" id="btn-reset-settings">Voreinstellungen zurücksetzen</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="preview-modal" aria-hidden="true">
+    <div class="modal modal-preview" role="dialog" aria-labelledby="preview-modal-title">
+      <div class="modal-header">
+        <h2 class="modal-title" id="preview-modal-title">Charakter-Vorschau</h2>
+        <button type="button" class="modal-close" id="preview-modal-close" aria-label="Schließen">×</button>
+      </div>
+      <div class="modal-body">
+        <dl class="char-sheet" id="preview-char-sheet"></dl>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
