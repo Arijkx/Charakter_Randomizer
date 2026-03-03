@@ -408,7 +408,9 @@ body {
 .char-sheet {
   margin: 0;
   display: grid;
+  grid-template-columns: 180px 1fr;
   gap: 8px 16px;
+  text-align: left;
 }
 
 .char-sheet dt {
@@ -418,12 +420,14 @@ body {
   letter-spacing: 0.05em;
   color: var(--text-muted);
   grid-column: 1;
+  text-align: left;
 }
 
 .char-sheet dd {
   margin: 0;
   font-size: 0.9375rem;
   grid-column: 2;
+  text-align: left;
 }
 
 .saved h2 {
