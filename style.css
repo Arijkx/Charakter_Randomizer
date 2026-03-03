@@ -104,7 +104,7 @@ body {
   overflow: hidden;
 }
 
-/* Modal Voreinstellungen */
+/* Settings modal */
 .modal-overlay {
   display: none;
   position: fixed;
@@ -471,7 +471,7 @@ body {
   border-color: var(--text-muted);
 }
 
-/* Modal-Vorschau: klassisches dt/dd ohne Button */
+/* Preview modal: plain dt/dd without button */
 .char-sheet {
   margin: 0;
   display: grid;

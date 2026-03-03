@@ -1,122 +1,121 @@
 (function () {
   "use strict";
 
-  const FACTION = ["Horde", "Allianz"];
+  const FACTION = ["Horde", "Alliance"];
   const RACES_BY_FACTION = {
-    Allianz: [
-      "Mensch", "Zwerg", "Nachtelf", "Gnom", "Draenei", "Worgen",
-      "Lichtgeschmiedeter Draenei", "Voidelf", "Schwarzfelszwerg", "Kul Tiraner", "Mechagnom"
+    Alliance: [
+      "Human", "Dwarf", "Night Elf", "Gnome", "Draenei", "Worgen",
+      "Lightforged Draenei", "Void Elf", "Dark Iron Dwarf", "Kul Tiran", "Mechagnome"
     ],
     Horde: [
-      "Orc", "Untoter", "Taure", "Troll", "Blutelf", "Goblin", "Pandaren (Horde)",
-      "Hochberg-Taure", "Nachtgeborener", "Mag'har-Orc", "Zandalari-Troll", "Vulpera"
+      "Orc", "Undead", "Tauren", "Troll", "Blood Elf", "Goblin", "Pandaren (Horde)",
+      "Highmountain Tauren", "Nightborne", "Mag'har Orc", "Zandalari Troll", "Vulpera"
     ]
   };
   const CLASSES = [
-    "Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Schamane",
-    "Magier", "Hexenmeister", "Mönch", "Druide", "Dämonenjäger", "Todesritter", "Evoker"
+    "Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Shaman",
+    "Mage", "Warlock", "Monk", "Druid", "Demon Hunter", "Death Knight", "Evoker"
   ];
   const HAIR_COLORS = [
-    "Schwarz", "Dunkelbraun", "Braun", "Hellbraun", "Blond", "Weiß / Grau",
-    "Silber", "Rot", "Kupfer / Orange", "Grün", "Blau", "Lila / Violett", "Pink / Magenta", "Türkis"
+    "Black", "Dark Brown", "Brown", "Light Brown", "Blonde", "White / Gray",
+    "Silver", "Red", "Copper / Orange", "Green", "Blue", "Purple / Violet", "Pink / Magenta", "Turquoise"
   ];
-  const GENDERS = ["Männlich", "Weiblich"];
-  const ARMOR_TYPES = ["Stoff", "Leder", "Kette", "Platte"];
+  const GENDERS = ["Male", "Female"];
+  const ARMOR_TYPES = ["Cloth", "Leather", "Mail", "Plate"];
   const POSES = [
-    "Stehend, neutral", "Stehend, kampfbereit", "Kniend", "Sitzend",
-    "Laufend / in Bewegung", "Springend", "Siegespose (Waffe erhoben)",
-    "Nachdenklich / nach unten blickend", "Drohend / angriffsbereit",
-    "Verletzt / ermattet", "Zauber wirkend (Arme erhoben)", "Schild hochgehalten", "Bogen gespannt"
+    "Standing, neutral", "Standing, combat ready", "Kneeling", "Sitting",
+    "Running / in motion", "Jumping", "Victory pose (weapon raised)",
+    "Thoughtful / looking down", "Threatening / attack ready",
+    "Injured / weary", "Casting spell (arms raised)", "Shield raised", "Bow drawn"
   ];
   const BACKGROUNDS = [
-    "Sturmwind", "Eisenschmiede", "Darnassus (zerstört)", "Gnomeregan", "Exodar", "Gilneas (Ruinen)",
-    "Orgrimmar", "Unterstadt (zerstört)", "Donnerfels", "Silbermond", "Beutebucht",
-    "Schattenmond-Tal (Draenei)", "Dalaran", "Shattrath", "Oribos", "Valdrakken",
-    "Elwynnwald", "Westfall", "Rotkammgebirge", "Dunkelhain", "Durotar", "Brachland",
-    "Teldrassil (zerstört)", "Ashenvale", "Tanaris", "Un'Goro-Krater", "Schattenhochland",
-    "Frostfeuergrat", "Nagrand", "Schattenmond", "Zangarmarschen", "Die Scherbenwelt",
-    "Nordend", "Pandaria", "Zandalar", "Kul Tiras", "Schattenlande", "Die Dracheninseln",
-    "Taverne", "Arena", "Dungeon", "Schlachtfeld", "Raid", "Burg / Festung", "Tempel",
-    "Ruinen", "Wald", "Wüste", "Strand / Küste", "Berg / Gipfel", "Schlucht", "Höhle",
-    "Bibliothek", "Marktplatz", "Hafen", "Brücke", "Friedhof", "Verlies"
+    "Stormwind", "Ironforge", "Darnassus (destroyed)", "Gnomeregan", "Exodar", "Gilneas (Ruins)",
+    "Orgrimmar", "Undercity (destroyed)", "Thunder Bluff", "Silvermoon", "Booty Bay",
+    "Shadowmoon Valley (Draenei)", "Dalaran", "Shattrath", "Oribos", "Valdrakken",
+    "Elwynn Forest", "Westfall", "Redridge Mountains", "Duskwood", "Durotar", "The Barrens",
+    "Teldrassil (destroyed)", "Ashenvale", "Tanaris", "Un'Goro Crater", "Shadow Highlands",
+    "Frostfire Ridge", "Nagrand", "Shadowmoon", "Zangarmarsh", "Outland",
+    "Northrend", "Pandaria", "Zandalar", "Kul Tiras", "Shadowlands", "Dragon Isles",
+    "Tavern", "Arena", "Dungeon", "Battleground", "Raid", "Castle / Fortress", "Temple",
+    "Ruins", "Forest", "Desert", "Beach / Coast", "Mountain / Peak", "Canyon", "Cave",
+    "Library", "Marketplace", "Harbor", "Bridge", "Cemetery", "Prison"
   ];
   const BACKGROUNDS_SIMPEL = [
-    "Farbverlauf", "Farbe", "leichte Textur", "einfarbig", "abstrakt", "minimal",
-    "Körnung", "weicher Fokus", "Schatten", "Lichtfleck", "Vignette"
+    "Gradient", "Color", "light texture", "solid color", "abstract", "minimal",
+    "Grain", "soft focus", "Shadow", "light spot", "Vignette"
   ];
   const MOODS = [
-    "Bedrohlich", "Episch", "Traurig", "Siegesicher / triumphierend", "Mysteriös", "Düster",
-    "Heroisch", "Friedlich", "Kampfbereit", "Nachdenklich", "Melancholisch", "Grimmig",
-    "Stolz", "Verzweifelt", "Hoffnungsvoll", "Ruhig / meditativ", "Wild / ungebändigt", "Magisch / geheimnisvoll"
+    "Threatening", "Epic", "Sad", "Triumphant", "Mysterious", "Dark",
+    "Heroic", "Peaceful", "Combat ready", "Thoughtful", "Melancholic", "Grim",
+    "Proud", "Desperate", "Hopeful", "Calm / meditative", "Wild / untamed", "Magical / mysterious"
   ];
 
   const WEAPONS_MELEE = [
-    "Einhändiges Schwert", "Zweihand-Schwert", "Einhändige Axt", "Zweihand-Axt",
-    "Einhändiger Streitkolben", "Zweihand-Streitkolben", "Streithammer", "Dolch",
-    "Faustwaffe", "Stab (Nahkampf)", "Wurfwaffe", "Faustwaffe (Paar)"
+    "One-handed Sword", "Two-handed Sword", "One-handed Axe", "Two-handed Axe",
+    "One-handed Mace", "Two-handed Mace", "Warhammer", "Dagger",
+    "Fist weapon", "Staff (melee)", "Throwing weapon", "Fist weapon (pair)"
   ];
-  const WEAPONS_RANGED = ["Bogen", "Armbrust", "Gewehr"];
-  const WEAPONS_CASTER = ["Zauberstab", "Stab (Magie)", "Zauberbuch", "Fokus", "Peitsche (Hexenmeister)"];
+  const WEAPONS_RANGED = ["Bow", "Crossbow", "Gun"];
+  const WEAPONS_CASTER = ["Wand", "Staff (magic)", "Spellbook", "Focus", "Warlock whip"];
 
-  const OFFHAND_SHIELD = ["Schild"];
-  const OFFHAND_PARRY = ["Parierwaffe (Dolch, Schwert, etc.)"];
-  const OFFHAND_CASTER = ["Fokus", "Zauberbuch", "Kerze / Relikt"];
-  const OFFHAND_DUAL = ["Zweite Waffe (Dual Wield)"];
-  const OFFHAND_NONE = ["Keine (Zweihand-Waffe)"];
+  const OFFHAND_SHIELD = ["Shield"];
+  const OFFHAND_PARRY = ["Parry weapon (dagger, sword, etc.)"];
+  const OFFHAND_CASTER = ["Focus", "Spellbook", "Candle / Relic"];
+  const OFFHAND_DUAL = ["Off-hand weapon (Dual Wield)"];
+  const OFFHAND_NONE = ["None (two-handed weapon)"];
 
   const CLASS_ARMOR = {
-    Krieger: "Platte", Paladin: "Platte", Jäger: "Kette", Schurke: "Leder",
-    Priester: "Stoff", Schamane: "Kette", Magier: "Stoff", Hexenmeister: "Stoff",
-    Mönch: "Leder", Druide: "Leder", Dämonenjäger: "Leder", Todesritter: "Platte", Evoker: "Stoff"
+    Warrior: "Plate", Paladin: "Plate", Hunter: "Mail", Rogue: "Leather",
+    Priest: "Cloth", Shaman: "Mail", Mage: "Cloth", Warlock: "Cloth",
+    Monk: "Leather", Druid: "Leather", "Demon Hunter": "Leather", "Death Knight": "Plate", Evoker: "Cloth"
   };
 
   const CLASS_WEAPON_POOL = {
-    Krieger: WEAPONS_MELEE,
+    Warrior: WEAPONS_MELEE,
     Paladin: WEAPONS_MELEE,
-    Jäger: [...WEAPONS_RANGED, "Dolch", "Faustwaffe", "Stab (Nahkampf)"],
-    Schurke: ["Einhändiges Schwert", "Einhändige Axt", "Dolch", "Faustwaffe", "Faustwaffe (Paar)"],
-    Priester: WEAPONS_CASTER,
-    Schamane: [...WEAPONS_MELEE.filter(w => !w.startsWith("Zweihand")), "Stab (Magie)"],
-    Magier: WEAPONS_CASTER,
-    Hexenmeister: WEAPONS_CASTER,
-    Mönch: ["Einhändiger Streitkolben", "Streithammer", "Dolch", "Faustwaffe", "Faustwaffe (Paar)", "Stab (Nahkampf)"],
-    Druide: ["Einhändiger Streitkolben", "Streithammer", "Dolch", "Stab (Magie)", "Stab (Nahkampf)"],
-    Dämonenjäger: ["Einhändiges Schwert", "Einhändige Axt", "Faustwaffe (Paar)"],
-    Todesritter: WEAPONS_MELEE,
-    Evoker: ["Zauberstab", "Stab (Magie)", "Fokus"]
+    Hunter: [...WEAPONS_RANGED, "Dagger", "Fist weapon", "Staff (melee)"],
+    Rogue: ["One-handed Sword", "One-handed Axe", "Dagger", "Fist weapon", "Fist weapon (pair)"],
+    Priest: WEAPONS_CASTER,
+    Shaman: [...WEAPONS_MELEE.filter(w => !w.startsWith("Two-handed")), "Staff (magic)"],
+    Mage: WEAPONS_CASTER,
+    Warlock: WEAPONS_CASTER,
+    Monk: ["One-handed Mace", "Warhammer", "Dagger", "Fist weapon", "Fist weapon (pair)", "Staff (melee)"],
+    Druid: ["One-handed Mace", "Warhammer", "Dagger", "Staff (magic)", "Staff (melee)"],
+    "Demon Hunter": ["One-handed Sword", "One-handed Axe", "Fist weapon (pair)"],
+    "Death Knight": WEAPONS_MELEE,
+    Evoker: ["Wand", "Staff (magic)", "Focus"]
   };
 
   const ALL_WEAPONS = [...new Set(Object.values(CLASS_WEAPON_POOL).flat())].sort();
   const ALL_OFFHANDS = [
-    "Schild", "Parierwaffe (Dolch, Schwert, etc.)", "Fokus", "Zauberbuch", "Kerze / Relikt",
-    "Zweite Waffe (Dual Wield)", "Keine (Zweihand-Waffe)"
+    "Shield", "Parry weapon (dagger, sword, etc.)", "Focus", "Spellbook", "Candle / Relic",
+    "Off-hand weapon (Dual Wield)", "None (two-handed weapon)"
   ];
 
-  /** WoW-Logik: Welche Klasse kann welche Rasse spielen (laut offiziellen Kombinationen) */
   const RACE_CLASSES = {
-    Mensch: ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Todesritter"],
-    Zwerg: ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Todesritter"],
-    Nachtelf: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Druide", "Dämonenjäger", "Todesritter"],
-    Gnom: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Todesritter"],
-    Draenei: ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Todesritter"],
-    Worgen: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Druide", "Todesritter"],
-    "Lichtgeschmiedeter Draenei": ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Mönch", "Todesritter"],
-    Voidelf: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Todesritter"],
-    Schwarzfelszwerg: ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Todesritter"],
-    "Kul Tiraner": ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Druide", "Todesritter"],
-    Mechagnom: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Todesritter"],
-    Orc: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Todesritter"],
-    Untoter: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Todesritter"],
-    Taure: ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Druide", "Todesritter"],
-    Troll: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Druide", "Todesritter"],
-    Blutelf: ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Dämonenjäger", "Todesritter"],
-    Goblin: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Todesritter"],
-    "Pandaren (Horde)": ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Todesritter"],
-    "Hochberg-Taure": ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Druide", "Todesritter"],
-    Nachtgeborener: ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Todesritter"],
-    "Mag'har-Orc": ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Todesritter"],
-    "Zandalari-Troll": ["Krieger", "Paladin", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Schamane", "Druide", "Todesritter"],
-    Vulpera: ["Krieger", "Jäger", "Schurke", "Priester", "Magier", "Hexenmeister", "Mönch", "Todesritter"]
+    Human: ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Death Knight"],
+    Dwarf: ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Death Knight"],
+    "Night Elf": ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Druid", "Demon Hunter", "Death Knight"],
+    Gnome: ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Death Knight"],
+    Draenei: ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Death Knight"],
+    Worgen: ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Druid", "Death Knight"],
+    "Lightforged Draenei": ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Monk", "Death Knight"],
+    "Void Elf": ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Death Knight"],
+    "Dark Iron Dwarf": ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Death Knight"],
+    "Kul Tiran": ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Druid", "Death Knight"],
+    Mechagnome: ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Death Knight"],
+    Orc: ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Death Knight"],
+    Undead: ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Death Knight"],
+    Tauren: ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Druid", "Death Knight"],
+    Troll: ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Druid", "Death Knight"],
+    "Blood Elf": ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Demon Hunter", "Death Knight"],
+    Goblin: ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Death Knight"],
+    "Pandaren (Horde)": ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Death Knight"],
+    "Highmountain Tauren": ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Druid", "Death Knight"],
+    Nightborne: ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Death Knight"],
+    "Mag'har Orc": ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Death Knight"],
+    "Zandalari Troll": ["Warrior", "Paladin", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Shaman", "Druid", "Death Knight"],
+    Vulpera: ["Warrior", "Hunter", "Rogue", "Priest", "Mage", "Warlock", "Monk", "Death Knight"]
   };
 
   function getClassesForRace(race) {
@@ -132,31 +131,31 @@
 
   function getOffhandPool(klasse, weapon) {
     const twoHand = weapon && (
-      weapon.startsWith("Zweihand") ||
-      weapon === "Streithammer" ||
-      weapon === "Stab (Magie)" ||
-      weapon === "Stab (Nahkampf)"
+      weapon.startsWith("Two-handed") ||
+      weapon === "Warhammer" ||
+      weapon === "Staff (magic)" ||
+      weapon === "Staff (melee)"
     );
     if (twoHand) return OFFHAND_NONE;
     switch (klasse) {
-      case "Krieger":
+      case "Warrior":
       case "Paladin":
-      case "Todesritter":
+      case "Death Knight":
         return [...OFFHAND_SHIELD, ...OFFHAND_PARRY, ...OFFHAND_DUAL];
-      case "Schurke":
-      case "Mönch":
-      case "Dämonenjäger":
+      case "Rogue":
+      case "Monk":
+      case "Demon Hunter":
         return OFFHAND_DUAL;
-      case "Priester":
-      case "Magier":
-      case "Hexenmeister":
+      case "Priest":
+      case "Mage":
+      case "Warlock":
       case "Evoker":
         return OFFHAND_CASTER;
-      case "Schamane":
+      case "Shaman":
         return [...OFFHAND_SHIELD, ...OFFHAND_CASTER];
-      case "Jäger":
-        return ["Keine (Zweihand-Waffe)"];
-      case "Druide":
+      case "Hunter":
+        return ["None (two-handed weapon)"];
+      case "Druid":
         return OFFHAND_CASTER;
       default:
         return [...OFFHAND_SHIELD, ...OFFHAND_PARRY, ...OFFHAND_CASTER, ...OFFHAND_DUAL];
@@ -180,31 +179,31 @@
       return asNumber ? parseInt(v, 10) : v;
     };
     const set = (key, val) => { if (val !== undefined) o[key] = val; };
-    set("Fraktion", get("select-fraktion"));
-    set("Rasse", get("select-rasse"));
-    set("Klasse", get("select-klasse"));
-    set("Haarfarbe", get("select-haarfarbe"));
-    set("Geschlecht", get("select-geschlecht"));
-    set("Waffe", get("select-waffe"));
-    set("Nebenhand", get("select-nebenhand"));
-    set("Rüstung", get("select-ruestung"));
+    set("Faction", get("select-fraktion"));
+    set("Race", get("select-rasse"));
+    set("Class", get("select-klasse"));
+    set("Hair color", get("select-haarfarbe"));
+    set("Gender", get("select-geschlecht"));
+    set("Weapon", get("select-waffe"));
+    set("Off-hand", get("select-nebenhand"));
+    set("Armor", get("select-ruestung"));
     set("Level", get("select-level", true));
     set("Pose", get("select-pose"));
-    set("Hintergrund Komplex", get("select-hintergrund"));
-    set("Hintergrund Simpel", get("select-hintergrund-simpel"));
-    set("Stimmung", get("select-stimmung"));
+    set("Background (complex)", get("select-hintergrund"));
+    set("Background (simple)", get("select-hintergrund-simpel"));
+    set("Mood", get("select-stimmung"));
     return o;
   }
 
   const EXCLUSION_KEYS = [
-    "Fraktion", "Rasse", "Klasse", "Haarfarbe", "Geschlecht", "Waffe", "Nebenhand",
-    "Rüstung", "Level", "Pose", "Hintergrund Komplex", "Hintergrund Simpel", "Stimmung"
+    "Faction", "Race", "Class", "Hair color", "Gender", "Weapon", "Off-hand",
+    "Armor", "Level", "Pose", "Background (complex)", "Background (simple)", "Mood"
   ];
   const EXCLUSION_SELECT_ID = {
-    Fraktion: "exclude-fraktion", Rasse: "exclude-rasse", Klasse: "exclude-klasse",
-    Haarfarbe: "exclude-haarfarbe", Geschlecht: "exclude-geschlecht", Waffe: "exclude-waffe",
-    Nebenhand: "exclude-nebenhand", Rüstung: "exclude-ruestung", Level: "exclude-level",
-    Pose: "exclude-pose", "Hintergrund Komplex": "exclude-hintergrund", "Hintergrund Simpel": "exclude-hintergrund-simpel", Stimmung: "exclude-stimmung"
+    Faction: "exclude-fraktion", Race: "exclude-rasse", Class: "exclude-klasse",
+    "Hair color": "exclude-haarfarbe", Gender: "exclude-geschlecht", Weapon: "exclude-waffe",
+    "Off-hand": "exclude-nebenhand", Armor: "exclude-ruestung", Level: "exclude-level",
+    Pose: "exclude-pose", "Background (complex)": "exclude-hintergrund", "Background (simple)": "exclude-hintergrund-simpel", Mood: "exclude-stimmung"
   };
 
   function getExclusions() {
@@ -231,74 +230,74 @@
   function generate(overrides) {
     overrides = overrides || {};
     const excl = getExclusions();
-    let faction = overrides.Fraktion;
-    if (!faction && overrides.Rasse) {
+    let faction = overrides.Faction;
+    if (!faction && overrides.Race) {
       for (const f of FACTION) {
-        if (RACES_BY_FACTION[f].includes(overrides.Rasse)) { faction = f; break; }
+        if (RACES_BY_FACTION[f].includes(overrides.Race)) { faction = f; break; }
       }
     }
-    faction = faction || pick(filterPool(FACTION, excl.Fraktion));
-    let racePool = filterPool(RACES_BY_FACTION[faction], excl.Rasse);
-    if (overrides.Klasse) {
-      const racesForClass = getRacesForClass(overrides.Klasse);
+    faction = faction || pick(filterPool(FACTION, excl.Faction));
+    let racePool = filterPool(RACES_BY_FACTION[faction], excl.Race);
+    if (overrides.Class) {
+      const racesForClass = getRacesForClass(overrides.Class);
       racePool = racePool.filter(r => racesForClass.includes(r));
       if (racePool.length === 0) racePool = RACES_BY_FACTION[faction];
     }
-    const race = overrides.Rasse && racePool.includes(overrides.Rasse)
-      ? overrides.Rasse
+    const race = overrides.Race && racePool.includes(overrides.Race)
+      ? overrides.Race
       : pick(racePool);
-    const classPool = filterPool(getClassesForRace(race), excl.Klasse);
-    let klasse = overrides.Klasse;
+    const classPool = filterPool(getClassesForRace(race), excl.Class);
+    let klasse = overrides.Class;
     if (klasse && !classPool.includes(klasse)) klasse = null;
-    if (!klasse && overrides.Waffe) {
-      const classesForWeapon = getClassesForWeapon(overrides.Waffe);
+    if (!klasse && overrides.Weapon) {
+      const classesForWeapon = getClassesForWeapon(overrides.Weapon);
       const valid = classesForWeapon.filter(c => classPool.includes(c));
       klasse = valid.length ? pick(valid) : pick(classPool);
     }
     klasse = klasse || pick(classPool);
-    const armor = overrides.Rüstung && ARMOR_TYPES.includes(overrides.Rüstung)
-      ? overrides.Rüstung
+    const armor = overrides.Armor && ARMOR_TYPES.includes(overrides.Armor)
+      ? overrides.Armor
       : CLASS_ARMOR[klasse];
-    const weaponPool = filterPool(CLASS_WEAPON_POOL[klasse] || WEAPONS_MELEE, excl.Waffe);
-    const weapon = overrides.Waffe && weaponPool.includes(overrides.Waffe)
-      ? overrides.Waffe
+    const weaponPool = filterPool(CLASS_WEAPON_POOL[klasse] || WEAPONS_MELEE, excl.Weapon);
+    const weapon = overrides.Weapon && weaponPool.includes(overrides.Weapon)
+      ? overrides.Weapon
       : pick(weaponPool);
-    const offhandPool = filterPool(getOffhandPool(klasse, weapon), excl.Nebenhand);
-    const offhand = overrides.Nebenhand && offhandPool.includes(overrides.Nebenhand)
-      ? overrides.Nebenhand
+    const offhandPool = filterPool(getOffhandPool(klasse, weapon), excl["Off-hand"]);
+    const offhand = overrides["Off-hand"] && offhandPool.includes(overrides["Off-hand"])
+      ? overrides["Off-hand"]
       : pick(offhandPool);
     const levelPool = filterPool(Array.from({ length: 70 }, (_, i) => i + 1), excl.Level);
     const level = overrides.Level >= 1 && overrides.Level <= 70 ? overrides.Level : pick(levelPool);
     return {
-      Fraktion: faction,
-      Klasse: klasse,
-      Rasse: race,
-      Haarfarbe: overrides.Haarfarbe && HAIR_COLORS.includes(overrides.Haarfarbe) ? overrides.Haarfarbe : pick(filterPool(HAIR_COLORS, excl.Haarfarbe)),
-      Geschlecht: overrides.Geschlecht && GENDERS.includes(overrides.Geschlecht) ? overrides.Geschlecht : pick(filterPool(GENDERS, excl.Geschlecht)),
-      Waffe: weapon,
-      Nebenhand: offhand,
-      Rüstung: armor,
+      Faction: faction,
+      Class: klasse,
+      Race: race,
+      "Hair color": overrides["Hair color"] && HAIR_COLORS.includes(overrides["Hair color"]) ? overrides["Hair color"] : pick(filterPool(HAIR_COLORS, excl["Hair color"])),
+      Gender: overrides.Gender && GENDERS.includes(overrides.Gender) ? overrides.Gender : pick(filterPool(GENDERS, excl.Gender)),
+      Weapon: weapon,
+      "Off-hand": offhand,
+      Armor: armor,
       Level: level,
       Pose: overrides.Pose && POSES.includes(overrides.Pose) ? overrides.Pose : pick(filterPool(POSES, excl.Pose)),
       ...pickOneBackground(overrides, excl),
-      Stimmung: overrides.Stimmung && MOODS.includes(overrides.Stimmung) ? overrides.Stimmung : pick(filterPool(MOODS, excl.Stimmung))
+      Mood: overrides.Mood && MOODS.includes(overrides.Mood) ? overrides.Mood : pick(filterPool(MOODS, excl.Mood))
     };
   }
 
   function pickOneBackground(overrides, excl) {
-    const useKomplex = overrides["Hintergrund Komplex"] && BACKGROUNDS.includes(overrides["Hintergrund Komplex"]);
-    const useSimpel = overrides["Hintergrund Simpel"] && BACKGROUNDS_SIMPEL.includes(overrides["Hintergrund Simpel"]);
+    const useKomplex = overrides["Background (complex)"] && BACKGROUNDS.includes(overrides["Background (complex)"]);
+    const useSimpel = overrides["Background (simple)"] && BACKGROUNDS_SIMPEL.includes(overrides["Background (simple)"]);
     if (useKomplex) {
-      return { "Hintergrund Komplex": overrides["Hintergrund Komplex"] };
+      return { "Background (complex)": overrides["Background (complex)"] };
     }
     if (useSimpel) {
-      return { "Hintergrund Simpel": overrides["Hintergrund Simpel"] };
+      return { "Background (simple)": overrides["Background (simple)"] };
     }
-    const type = pick(["Komplex", "Simpel"]);
-    if (type === "Komplex") {
-      return { "Hintergrund Komplex": pick(filterPool(BACKGROUNDS, excl["Hintergrund Komplex"])) };
+    const type = pick(["complex", "simple"]);
+    if (type === "complex") {
+      return { "Background (complex)": pick(filterPool(BACKGROUNDS, excl["Background (complex)"])) };
     }
-    return { "Hintergrund Simpel": pick(filterPool(BACKGROUNDS_SIMPEL, excl["Hintergrund Simpel"])) };
+    return { "Background (simple)": pick(filterPool(BACKGROUNDS_SIMPEL, excl["Background (simple)"])) };
   }
 
   function fillSelect(id, options) {
@@ -307,7 +306,7 @@
     sel.innerHTML = "";
     const first = document.createElement("option");
     first.value = "";
-    first.textContent = "— Zufällig —";
+    first.textContent = "— Random —";
     sel.appendChild(first);
     (options || []).forEach(val => {
       const opt = document.createElement("option");
@@ -318,21 +317,21 @@
   }
 
   function getExclusionOptionsForKey(key) {
-    const allRaces = [...RACES_BY_FACTION.Allianz, ...RACES_BY_FACTION.Horde];
+    const allRaces = [...RACES_BY_FACTION.Alliance, ...RACES_BY_FACTION.Horde];
     switch (key) {
-      case "Fraktion": return FACTION;
-      case "Rasse": return allRaces;
-      case "Klasse": return CLASSES_PLAYABLE;
-      case "Haarfarbe": return HAIR_COLORS;
-      case "Geschlecht": return GENDERS;
-      case "Waffe": return ALL_WEAPONS;
-      case "Nebenhand": return ALL_OFFHANDS;
-      case "Rüstung": return ARMOR_TYPES;
+      case "Faction": return FACTION;
+      case "Race": return allRaces;
+      case "Class": return CLASSES_PLAYABLE;
+      case "Hair color": return HAIR_COLORS;
+      case "Gender": return GENDERS;
+      case "Weapon": return ALL_WEAPONS;
+      case "Off-hand": return ALL_OFFHANDS;
+      case "Armor": return ARMOR_TYPES;
       case "Level": return Array.from({ length: 70 }, (_, i) => String(i + 1));
       case "Pose": return POSES;
-      case "Hintergrund Komplex": return BACKGROUNDS;
-      case "Hintergrund Simpel": return BACKGROUNDS_SIMPEL;
-      case "Stimmung": return MOODS;
+      case "Background (complex)": return BACKGROUNDS;
+      case "Background (simple)": return BACKGROUNDS_SIMPEL;
+      case "Mood": return MOODS;
       default: return [];
     }
   }
@@ -348,7 +347,7 @@
     sel.innerHTML = "";
     const first = document.createElement("option");
     first.value = "";
-    first.textContent = "— Ausschließen wählen —";
+    first.textContent = "— Choose to exclude —";
     sel.appendChild(first);
     options.forEach(val => {
       const opt = document.createElement("option");
@@ -369,7 +368,7 @@
     badge.appendChild(document.createTextNode(value));
     const removeBtn = document.createElement("button");
     removeBtn.type = "button";
-    removeBtn.setAttribute("aria-label", "Entfernen");
+    removeBtn.setAttribute("aria-label", "Remove");
     removeBtn.textContent = "×";
     removeBtn.addEventListener("click", function () {
       badge.remove();
@@ -387,9 +386,9 @@
     if (!grid) return;
     grid.innerHTML = "";
     const labelMap = {
-      Fraktion: "Fraktion", Rasse: "Rasse", Klasse: "Klasse", Haarfarbe: "Haarfarbe",
-      Geschlecht: "Geschlecht", Waffe: "Waffe", Nebenhand: "Nebenhand", Rüstung: "Rüstung",
-      Level: "Level", Pose: "Pose", "Hintergrund Komplex": "Hintergrund Komplex", "Hintergrund Simpel": "Hintergrund Simpel", Stimmung: "Stimmung"
+      Faction: "Faction", Race: "Race", Class: "Class", "Hair color": "Hair color",
+      Gender: "Gender", Weapon: "Weapon", "Off-hand": "Off-hand", Armor: "Armor",
+      Level: "Level", Pose: "Pose", "Background (complex)": "Background (complex)", "Background (simple)": "Background (simple)", Mood: "Mood"
     };
     EXCLUSION_KEYS.forEach(key => {
       const rowLabel = document.createElement("label");
@@ -443,7 +442,7 @@
     const klasse = classSel && classSel.value ? classSel.value : null;
     let options = faction
       ? RACES_BY_FACTION[faction]
-      : [...RACES_BY_FACTION.Allianz, ...RACES_BY_FACTION.Horde];
+      : [...RACES_BY_FACTION.Alliance, ...RACES_BY_FACTION.Horde];
     if (klasse) {
       const racesForClass = getRacesForClass(klasse);
       options = options.filter(r => racesForClass.includes(r));
@@ -452,7 +451,7 @@
     raceSel.innerHTML = "";
     const first = document.createElement("option");
     first.value = "";
-    first.textContent = "— Zufällig —";
+    first.textContent = "— Random —";
     raceSel.appendChild(first);
     options.forEach(val => {
       const opt = document.createElement("option");
@@ -471,7 +470,7 @@
     classSel.innerHTML = "";
     const first = document.createElement("option");
     first.value = "";
-    first.textContent = "— Zufällig —";
+    first.textContent = "— Random —";
     classSel.appendChild(first);
     options.forEach(val => {
       const opt = document.createElement("option");
@@ -485,9 +484,9 @@
     if (!currentChar) return;
     const overrides = { ...currentChar };
     delete overrides[key];
-    if (key === "Hintergrund Komplex" || key === "Hintergrund Simpel") {
-      delete overrides["Hintergrund Komplex"];
-      delete overrides["Hintergrund Simpel"];
+    if (key === "Background (complex)" || key === "Background (simple)") {
+      delete overrides["Background (complex)"];
+      delete overrides["Background (simple)"];
     }
     currentChar = generate(overrides);
     render(currentChar);
@@ -509,9 +508,9 @@
       .map(([key, value]) => {
         const keyEsc = key.replace(/"/g, "&quot;");
         const valueEsc = String(value).replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        const rerollBtn = key === "Fraktion"
+        const rerollBtn = key === "Faction"
           ? ""
-          : `<button type="button" class="btn-reroll" data-key="${keyEsc}" aria-label="${keyEsc} neu würfeln">Neu würfeln</button>`;
+          : `<button type="button" class="btn-reroll" data-key="${keyEsc}" aria-label="Roll ${keyEsc} again">Roll again</button>`;
         return `<div class="char-sheet-row">
           <span class="char-sheet-label">${keyEsc}</span>
           <span class="char-sheet-value">${valueEsc}</span>
@@ -527,11 +526,28 @@
     if (btnSave) btnSave.hidden = false;
   }
 
+  const DISPLAY_KEY_MAP = {
+    Fraktion: "Faction", Rasse: "Race", Klasse: "Class", Haarfarbe: "Hair color", Geschlecht: "Gender",
+    Waffe: "Weapon", Nebenhand: "Off-hand", Rüstung: "Armor", Level: "Level", Pose: "Pose",
+    "Hintergrund Komplex": "Background (complex)", "Hintergrund Simpel": "Background (simple)", Stimmung: "Mood"
+  };
+
+  function normalizeCharForDisplay(c) {
+    if (!c || c.Faction !== undefined) return c;
+    const out = {};
+    for (const [k, v] of Object.entries(c)) {
+      if (k === "savedAt") continue;
+      out[DISPLAY_KEY_MAP[k] || k] = v;
+    }
+    return out;
+  }
+
   function renderPreviewModal(char) {
     const sheet = document.getElementById("preview-char-sheet");
     if (!sheet) return;
-    sheet.innerHTML = char
-      ? Object.entries(char).map(([key, value]) => `<dt>${key}</dt><dd>${value}</dd>`).join("")
+    const normalized = normalizeCharForDisplay(char);
+    sheet.innerHTML = normalized && Object.keys(normalized).length
+      ? Object.entries(normalized).map(([key, value]) => `<dt>${key}</dt><dd>${value}</dd>`).join("")
       : "";
   }
 
@@ -563,10 +579,10 @@
   const STORAGE_KEY_SETTINGS = "wow-random-settings";
 
   const PRESET_SELECT_ID = {
-    Fraktion: "select-fraktion", Rasse: "select-rasse", Klasse: "select-klasse",
-    Haarfarbe: "select-haarfarbe", Geschlecht: "select-geschlecht", Waffe: "select-waffe",
-    Nebenhand: "select-nebenhand", Rüstung: "select-ruestung", Level: "select-level",
-    Pose: "select-pose", "Hintergrund Komplex": "select-hintergrund", "Hintergrund Simpel": "select-hintergrund-simpel", Stimmung: "select-stimmung"
+    Faction: "select-fraktion", Race: "select-rasse", Class: "select-klasse",
+    "Hair color": "select-haarfarbe", Gender: "select-geschlecht", Weapon: "select-waffe",
+    "Off-hand": "select-nebenhand", Armor: "select-ruestung", Level: "select-level",
+    Pose: "select-pose", "Background (complex)": "select-hintergrund", "Background (simple)": "select-hintergrund-simpel", Mood: "select-stimmung"
   };
 
   function getPresetsForStorage() {
@@ -586,6 +602,12 @@
     } catch (_) {}
   }
 
+  const LEGACY_SETTINGS_KEYS = {
+    Faction: "Fraktion", Race: "Rasse", Class: "Klasse", "Hair color": "Haarfarbe", Gender: "Geschlecht",
+    Weapon: "Waffe", "Off-hand": "Nebenhand", Armor: "Rüstung", Level: "Level", Pose: "Pose",
+    "Background (complex)": "Hintergrund Komplex", "Background (simple)": "Hintergrund Simpel", Mood: "Stimmung"
+  };
+
   function loadSettings() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY_SETTINGS);
@@ -595,7 +617,7 @@
         EXCLUSION_KEYS.forEach(key => {
           const id = PRESET_SELECT_ID[key];
           const el = document.getElementById(id);
-          const val = data.presets[key];
+          const val = data.presets[key] ?? (LEGACY_SETTINGS_KEYS[key] && data.presets[LEGACY_SETTINGS_KEYS[key]]);
           if (el && val !== undefined && val !== null) el.value = val;
         });
         updateRasseOptions();
@@ -606,7 +628,7 @@
           const container = document.getElementById("exclusion-badges-" + EXCLUSION_SELECT_ID[key].replace("exclude-", ""));
           if (!container) return;
           container.innerHTML = "";
-          const vals = data.exclusions[key];
+          const vals = data.exclusions[key] ?? (LEGACY_SETTINGS_KEYS[key] && data.exclusions[LEGACY_SETTINGS_KEYS[key]]);
           if (Array.isArray(vals))
             vals.forEach(v => addExclusionBadge(key, key === "Level" ? String(v) : v, true));
           refreshExclusionSelect(key);
@@ -681,14 +703,17 @@
     ul.innerHTML = list
       .map((entry, i) => {
         const c = entry.Level !== undefined ? entry : entry.char;
-        const title = [c.Rasse, c.Klasse, "Stufe " + c.Level].filter(Boolean).join(" · ");
-        const meta = [c.Fraktion, c["Hintergrund Komplex"] || c["Hintergrund Simpel"]].filter(Boolean).join(" · ");
+        const race = c.Race || c.Rasse;
+        const cls = c.Class || c.Klasse;
+        const lvl = c.Level;
+        const title = [race, cls, lvl != null ? "Level " + lvl : ""].filter(Boolean).join(" · ");
+        const meta = [c.Faction || c.Fraktion, c["Background (complex)"] || c["Hintergrund Komplex"] || c["Background (simple)"] || c["Hintergrund Simpel"]].filter(Boolean).join(" · ");
         return `
           <li>
             <div class="char-title">${title}</div>
             <div class="char-meta">${meta}</div>
-            <button type="button" data-load="${i}">Anzeigen</button>
-            <button type="button" data-delete="${i}">Löschen</button>
+            <button type="button" data-load="${i}">Preview</button>
+            <button type="button" data-delete="${i}">Delete</button>
           </li>
         `;
       })
@@ -698,7 +723,7 @@
         const idx = parseInt(this.getAttribute("data-load"), 10);
         const entry = list[idx];
         const c = entry.Level !== undefined ? entry : entry.char;
-        openPreviewModal(c);
+        openPreviewModal(normalizeCharForDisplay(c));
       });
     });
     ul.querySelectorAll("[data-delete]").forEach(btn => {

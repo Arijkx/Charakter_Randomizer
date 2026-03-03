@@ -1,43 +1,43 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Charakter Randomizer</title>
+  <title>Character Randomizer</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app">
     <header class="header">
-      <h1>Charakter Randomizer</h1>
-      <p class="subtitle">Generiert zufällige Charaktere aus dem World of Warcraft Universum</p>
+      <h1>Character Randomizer</h1>
+      <p class="subtitle">Generates random characters from the World of Warcraft universe</p>
     </header>
 
     <nav class="tabs" role="tablist">
-      <button type="button" class="tab active" role="tab" id="tab-generator" aria-selected="true" aria-controls="panel-generator">Generieren</button>
-      <button type="button" class="tab" role="tab" id="tab-saved" aria-selected="false" aria-controls="panel-saved">Gespeicherte Charaktere</button>
+      <button type="button" class="tab active" role="tab" id="tab-generator" aria-selected="true" aria-controls="panel-generator">Generate</button>
+      <button type="button" class="tab" role="tab" id="tab-saved" aria-selected="false" aria-controls="panel-saved">Saved Characters</button>
     </nav>
 
     <main class="main">
       <div class="tab-panel active" id="panel-generator" role="tabpanel">
         <div class="actions">
-          <button type="button" class="btn btn-primary" id="btn-generate">Charakter würfeln</button>
-          <button type="button" class="btn btn-secondary" id="btn-settings">Voreinstellungen</button>
+          <button type="button" class="btn btn-primary" id="btn-generate">Roll character</button>
+          <button type="button" class="btn btn-secondary" id="btn-settings">Settings</button>
         </div>
 
         <section class="result" id="result">
-          <p class="placeholder" id="placeholder">Klicke auf „Neu generieren“, um einen Charakter zu erstellen.</p>
+          <p class="placeholder" id="placeholder">Click "Roll character" to create a character.</p>
           <div class="char-sheet-list" id="char-sheet" hidden></div>
         </section>
         <div class="result-actions">
-          <button type="button" class="btn btn-secondary" id="btn-save" hidden>speichern</button>
+          <button type="button" class="btn btn-secondary" id="btn-save" hidden>Save</button>
         </div>
       </div>
 
       <div class="tab-panel" id="panel-saved" role="tabpanel">
         <div class="saved">
-          <h2>Gespeicherte Charaktere</h2>
-          <p class="saved-empty" id="saved-empty">Noch keine gespeicherten Charaktere.</p>
+          <h2>Saved Characters</h2>
+          <p class="saved-empty" id="saved-empty">No saved characters yet.</p>
           <ul class="saved-list" id="saved-list"></ul>
         </div>
       </div>
@@ -51,52 +51,52 @@
   <div class="modal-overlay" id="settings-modal" aria-hidden="true">
     <div class="modal" role="dialog" aria-labelledby="modal-title">
       <div class="modal-header">
-        <h2 class="modal-title" id="modal-title">Voreinstellungen</h2>
-        <button type="button" class="modal-close" id="modal-close" aria-label="Schließen">×</button>
+        <h2 class="modal-title" id="modal-title">Settings</h2>
+        <button type="button" class="modal-close" id="modal-close" aria-label="Close">×</button>
       </div>
       <nav class="modal-tabs" role="tablist">
-        <button type="button" class="modal-tab active" role="tab" id="modal-tab-vorgaben" aria-selected="true" aria-controls="modal-panel-vorgaben">Vorgaben</button>
-        <button type="button" class="modal-tab" role="tab" id="modal-tab-exclusions" aria-selected="false" aria-controls="modal-panel-exclusions">Werte ausschließen</button>
+        <button type="button" class="modal-tab active" role="tab" id="modal-tab-vorgaben" aria-selected="true" aria-controls="modal-panel-vorgaben">Presets</button>
+        <button type="button" class="modal-tab" role="tab" id="modal-tab-exclusions" aria-selected="false" aria-controls="modal-panel-exclusions">Exclude values</button>
       </nav>
       <div class="modal-body">
         <div class="modal-panel active" id="modal-panel-vorgaben" role="tabpanel">
-          <p class="options-hint">Wähle Werte vor, die fest sein sollen. Alles andere wird zufällig gewürfelt.</p>
+          <p class="options-hint">Choose values to fix. Everything else will be rolled randomly.</p>
           <div class="options-grid">
-            <label for="select-fraktion">Fraktion</label>
-            <select id="select-fraktion"><option value="">— Zufällig —</option></select>
-            <label for="select-rasse">Rasse</label>
-            <select id="select-rasse"><option value="">— Zufällig —</option></select>
-            <label for="select-klasse">Klasse</label>
-            <select id="select-klasse"><option value="">— Zufällig —</option></select>
-            <label for="select-haarfarbe">Haarfarbe</label>
-            <select id="select-haarfarbe"><option value="">— Zufällig —</option></select>
-            <label for="select-geschlecht">Geschlecht</label>
-            <select id="select-geschlecht"><option value="">— Zufällig —</option></select>
-            <label for="select-waffe">Waffe</label>
-            <select id="select-waffe"><option value="">— Zufällig —</option></select>
-            <label for="select-nebenhand">Nebenhand</label>
-            <select id="select-nebenhand"><option value="">— Zufällig —</option></select>
-            <label for="select-ruestung">Rüstung</label>
-            <select id="select-ruestung"><option value="">— Zufällig —</option></select>
+            <label for="select-fraktion">Faction</label>
+            <select id="select-fraktion"><option value="">— Random —</option></select>
+            <label for="select-rasse">Race</label>
+            <select id="select-rasse"><option value="">— Random —</option></select>
+            <label for="select-klasse">Class</label>
+            <select id="select-klasse"><option value="">— Random —</option></select>
+            <label for="select-haarfarbe">Hair color</label>
+            <select id="select-haarfarbe"><option value="">— Random —</option></select>
+            <label for="select-geschlecht">Gender</label>
+            <select id="select-geschlecht"><option value="">— Random —</option></select>
+            <label for="select-waffe">Weapon</label>
+            <select id="select-waffe"><option value="">— Random —</option></select>
+            <label for="select-nebenhand">Off-hand</label>
+            <select id="select-nebenhand"><option value="">— Random —</option></select>
+            <label for="select-ruestung">Armor</label>
+            <select id="select-ruestung"><option value="">— Random —</option></select>
             <label for="select-level">Level</label>
-            <select id="select-level"><option value="">— Zufällig —</option></select>
+            <select id="select-level"><option value="">— Random —</option></select>
             <label for="select-pose">Pose</label>
-            <select id="select-pose"><option value="">— Zufällig —</option></select>
-            <label for="select-hintergrund">Hintergrund Komplex</label>
-            <select id="select-hintergrund"><option value="">— Zufällig —</option></select>
-            <label for="select-hintergrund-simpel">Hintergrund Simpel</label>
-            <select id="select-hintergrund-simpel"><option value="">— Zufällig —</option></select>
-            <label for="select-stimmung">Stimmung</label>
-            <select id="select-stimmung"><option value="">— Zufällig —</option></select>
+            <select id="select-pose"><option value="">— Random —</option></select>
+            <label for="select-hintergrund">Background (complex)</label>
+            <select id="select-hintergrund"><option value="">— Random —</option></select>
+            <label for="select-hintergrund-simpel">Background (simple)</label>
+            <select id="select-hintergrund-simpel"><option value="">— Random —</option></select>
+            <label for="select-stimmung">Mood</label>
+            <select id="select-stimmung"><option value="">— Random —</option></select>
           </div>
         </div>
         <div class="modal-panel" id="modal-panel-exclusions" role="tabpanel">
-          <p class="options-hint">Wähle einen Wert aus dem Dropdown – er wird als Badge hinzugefügt und beim Würfeln ausgeschlossen.</p>
+          <p class="options-hint">Select a value from the dropdown – it will be added as a badge and excluded when rolling.</p>
           <div class="exclusions-grid" id="exclusions-grid"></div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" id="btn-reset-settings">Voreinstellungen zurücksetzen</button>
+        <button type="button" class="btn btn-secondary" id="btn-reset-settings">Reset settings</button>
       </div>
     </div>
   </div>
@@ -104,8 +104,8 @@
   <div class="modal-overlay" id="preview-modal" aria-hidden="true">
     <div class="modal modal-preview" role="dialog" aria-labelledby="preview-modal-title">
       <div class="modal-header">
-        <h2 class="modal-title" id="preview-modal-title">Charakter-Vorschau</h2>
-        <button type="button" class="modal-close" id="preview-modal-close" aria-label="Schließen">×</button>
+        <h2 class="modal-title" id="preview-modal-title">Character preview</h2>
+        <button type="button" class="modal-close" id="preview-modal-close" aria-label="Close">×</button>
       </div>
       <div class="modal-body">
         <dl class="char-sheet" id="preview-char-sheet"></dl>
