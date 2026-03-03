@@ -481,6 +481,18 @@
     });
   }
 
+  function rerollKey(key) {
+    if (!currentChar) return;
+    const overrides = { ...currentChar };
+    delete overrides[key];
+    if (key === "Hintergrund Komplex" || key === "Hintergrund Simpel") {
+      delete overrides["Hintergrund Komplex"];
+      delete overrides["Hintergrund Simpel"];
+    }
+    currentChar = generate(overrides);
+    render(currentChar);
+  }
+
   function render(char) {
     const sheet = document.getElementById("char-sheet");
     const placeholder = document.getElementById("placeholder");
@@ -494,8 +506,24 @@
     placeholder.hidden = true;
     sheet.hidden = false;
     sheet.innerHTML = Object.entries(char)
-      .map(([key, value]) => `<dt>${key}</dt><dd>${value}</dd>`)
+      .map(([key, value]) => {
+        const keyEsc = key.replace(/"/g, "&quot;");
+        const valueEsc = String(value).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const rerollBtn = key === "Fraktion"
+          ? ""
+          : `<button type="button" class="btn-reroll" data-key="${keyEsc}" aria-label="${keyEsc} neu würfeln">Neu würfeln</button>`;
+        return `<div class="char-sheet-row">
+          <span class="char-sheet-label">${keyEsc}</span>
+          <span class="char-sheet-value">${valueEsc}</span>
+          ${rerollBtn}
+        </div>`;
+      })
       .join("");
+    sheet.querySelectorAll(".btn-reroll").forEach(btn => {
+      btn.addEventListener("click", function () {
+        rerollKey(this.getAttribute("data-key"));
+      });
+    });
     if (btnSave) btnSave.hidden = false;
   }
 
