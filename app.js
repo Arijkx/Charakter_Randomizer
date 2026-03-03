@@ -50,6 +50,29 @@
     "Proud", "Desperate", "Hopeful", "Calm / meditative", "Wild / untamed", "Magical / mysterious"
   ];
 
+  const FRAMING_OPTIONS = [
+    { value: "Extreme Close-Up", desc: "Shows only a very small detail, e.g. an eye or a mouth. Intense and emotional." },
+    { value: "Close-Up", desc: "Full face in frame. Focus on expression and emotion." },
+    { value: "Medium Close-Up", desc: "Head to neck/shoulders. Common in interviews or dialogue." },
+    { value: "Bust Shot", desc: "Head to chest. Classic portrait format." },
+    { value: "Medium Shot", desc: "Head to about waist. Combination of person and some environment." },
+    { value: "Medium Full Shot", desc: "Person visible to about the hips. Body language becomes clear." },
+    { value: "American Shot", desc: "Person to the knees. Originates from Westerns (revolver should be visible)." },
+    { value: "Three-Quarter Shot", desc: "Framed between hip and knee." },
+    { value: "Full Shot", desc: "Entire person in frame. Environment plays a larger role." },
+    { value: "Long Shot", desc: "Person with lots of environment. Focus on spatial effect." },
+    { value: "Extreme Long Shot", desc: "Landscape dominates the image. Person appears small or secondary." },
+    { value: "Image Framing", desc: "The chosen area of the subject that is visible in the image." },
+    { value: "Framing / Cropping", desc: "Deliberate choice of image frame and crop." },
+    { value: "Cut-Off", desc: "Deliberate cropping of parts of the image at the edge." },
+    { value: "Composition", desc: "Arrangement of all elements in the image." },
+    { value: "Aspect Ratio", desc: "Ratio of width to height (e.g. 16:9, 4:3)." },
+    { value: "Perspective", desc: "Angle of view on the subject (e.g. bird's eye, worm's eye)." },
+    { value: "Shot Size", desc: "Umbrella term for the depicted proximity or distance of the subject." }
+  ];
+  const FRAMING_VALUES = FRAMING_OPTIONS.map(o => o.value);
+  const FRAMING_DESCRIPTIONS = Object.fromEntries(FRAMING_OPTIONS.map(o => [o.value, o.desc]));
+
   const WEAPONS_MELEE = [
     "One-handed Sword", "Two-handed Sword", "One-handed Axe", "Two-handed Axe",
     "One-handed Mace", "Two-handed Mace", "Warhammer", "Dagger",
@@ -192,18 +215,19 @@
     set("Background (complex)", get("select-hintergrund"));
     set("Background (simple)", get("select-hintergrund-simpel"));
     set("Mood", get("select-stimmung"));
+    set("Framing", get("select-framing"));
     return o;
   }
 
   const EXCLUSION_KEYS = [
     "Faction", "Race", "Class", "Hair color", "Gender", "Weapon", "Off-hand",
-    "Armor", "Level", "Pose", "Background (complex)", "Background (simple)", "Mood"
+    "Armor", "Level", "Pose", "Background (complex)", "Background (simple)", "Mood", "Framing"
   ];
   const EXCLUSION_SELECT_ID = {
     Faction: "exclude-fraktion", Race: "exclude-rasse", Class: "exclude-klasse",
     "Hair color": "exclude-haarfarbe", Gender: "exclude-geschlecht", Weapon: "exclude-waffe",
     "Off-hand": "exclude-nebenhand", Armor: "exclude-ruestung", Level: "exclude-level",
-    Pose: "exclude-pose", "Background (complex)": "exclude-hintergrund", "Background (simple)": "exclude-hintergrund-simpel", Mood: "exclude-stimmung"
+    Pose: "exclude-pose", "Background (complex)": "exclude-hintergrund", "Background (simple)": "exclude-hintergrund-simpel", Mood: "exclude-stimmung", Framing: "exclude-framing"
   };
 
   function getExclusions() {
@@ -280,7 +304,8 @@
       Level: level,
       Pose: overrides.Pose && POSES.includes(overrides.Pose) ? overrides.Pose : pick(filterPool(POSES, excl.Pose)),
       ...pickOneBackground(overrides, excl),
-      Mood: overrides.Mood && MOODS.includes(overrides.Mood) ? overrides.Mood : pick(filterPool(MOODS, excl.Mood))
+      Mood: overrides.Mood && MOODS.includes(overrides.Mood) ? overrides.Mood : pick(filterPool(MOODS, excl.Mood)),
+      Framing: overrides.Framing && FRAMING_VALUES.includes(overrides.Framing) ? overrides.Framing : pick(filterPool(FRAMING_VALUES, excl.Framing))
     };
   }
 
@@ -332,6 +357,7 @@
       case "Background (complex)": return BACKGROUNDS;
       case "Background (simple)": return BACKGROUNDS_SIMPEL;
       case "Mood": return MOODS;
+      case "Framing": return FRAMING_VALUES;
       default: return [];
     }
   }
@@ -388,7 +414,7 @@
     const labelMap = {
       Faction: "Faction", Race: "Race", Class: "Class", "Hair color": "Hair color",
       Gender: "Gender", Weapon: "Weapon", "Off-hand": "Off-hand", Armor: "Armor",
-      Level: "Level", Pose: "Pose", "Background (complex)": "Background (complex)", "Background (simple)": "Background (simple)", Mood: "Mood"
+      Level: "Level", Pose: "Pose", "Background (complex)": "Background (complex)", "Background (simple)": "Background (simple)", Mood: "Mood", Framing: "Framing"
     };
     EXCLUSION_KEYS.forEach(key => {
       const rowLabel = document.createElement("label");
@@ -428,6 +454,7 @@
     fillSelect("select-hintergrund", BACKGROUNDS);
     fillSelect("select-hintergrund-simpel", BACKGROUNDS_SIMPEL);
     fillSelect("select-stimmung", MOODS);
+    fillSelect("select-framing", FRAMING_VALUES);
     updateRasseOptions();
     updateKlasseOptions();
     initExclusionOptions();
@@ -511,10 +538,20 @@
         const rerollBtn = key === "Faction"
           ? ""
           : `<button type="button" class="btn-reroll" data-key="${keyEsc}" aria-label="Roll ${keyEsc} again">Roll again</button>`;
+        const desc = key === "Framing" && FRAMING_DESCRIPTIONS[value];
+        const descEsc = desc ? desc.replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;") : "";
+        const infoBtn = desc
+          ? `<button type="button" class="char-sheet-info-btn" aria-label="Show description" title="Show description">ℹ</button>`
+          : "";
+        const valueContent = `${valueEsc} ${infoBtn}`.trim();
+        const descriptionBlock = desc
+          ? `<div class="char-sheet-row-description" hidden>${descEsc}</div>`
+          : "";
         return `<div class="char-sheet-row">
           <span class="char-sheet-label">${keyEsc}</span>
-          <span class="char-sheet-value">${valueEsc}</span>
+          <span class="char-sheet-value">${valueContent}</span>
           ${rerollBtn}
+          ${descriptionBlock}
         </div>`;
       })
       .join("");
@@ -523,13 +560,24 @@
         rerollKey(this.getAttribute("data-key"));
       });
     });
+    sheet.querySelectorAll(".char-sheet-info-btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const row = this.closest(".char-sheet-row");
+        const descEl = row && row.querySelector(".char-sheet-row-description");
+        if (!descEl) return;
+        const isOpen = !descEl.hidden;
+        descEl.hidden = isOpen;
+        this.setAttribute("aria-label", isOpen ? "Show description" : "Hide description");
+        this.setAttribute("aria-expanded", String(!isOpen));
+      });
+    });
     if (btnSave) btnSave.hidden = false;
   }
 
   const DISPLAY_KEY_MAP = {
     Fraktion: "Faction", Rasse: "Race", Klasse: "Class", Haarfarbe: "Hair color", Geschlecht: "Gender",
     Waffe: "Weapon", Nebenhand: "Off-hand", Rüstung: "Armor", Level: "Level", Pose: "Pose",
-    "Hintergrund Komplex": "Background (complex)", "Hintergrund Simpel": "Background (simple)", Stimmung: "Mood"
+    "Hintergrund Komplex": "Background (complex)", "Hintergrund Simpel": "Background (simple)", Stimmung: "Mood", Bildauschnitt: "Framing"
   };
 
   function normalizeCharForDisplay(c) {
@@ -582,7 +630,7 @@
     Faction: "select-fraktion", Race: "select-rasse", Class: "select-klasse",
     "Hair color": "select-haarfarbe", Gender: "select-geschlecht", Weapon: "select-waffe",
     "Off-hand": "select-nebenhand", Armor: "select-ruestung", Level: "select-level",
-    Pose: "select-pose", "Background (complex)": "select-hintergrund", "Background (simple)": "select-hintergrund-simpel", Mood: "select-stimmung"
+    Pose: "select-pose", "Background (complex)": "select-hintergrund", "Background (simple)": "select-hintergrund-simpel", Mood: "select-stimmung", Framing: "select-framing"
   };
 
   function getPresetsForStorage() {
@@ -605,7 +653,7 @@
   const LEGACY_SETTINGS_KEYS = {
     Faction: "Fraktion", Race: "Rasse", Class: "Klasse", "Hair color": "Haarfarbe", Gender: "Geschlecht",
     Weapon: "Waffe", "Off-hand": "Nebenhand", Armor: "Rüstung", Level: "Level", Pose: "Pose",
-    "Background (complex)": "Hintergrund Komplex", "Background (simple)": "Hintergrund Simpel", Mood: "Stimmung"
+    "Background (complex)": "Hintergrund Komplex", "Background (simple)": "Hintergrund Simpel", Mood: "Stimmung", Framing: "Bildauschnitt"
   };
 
   function loadSettings() {
