@@ -535,7 +535,10 @@
       : "";
   }
 
+  let previewModalTrigger = null;
+
   function openPreviewModal(char) {
+    previewModalTrigger = document.activeElement;
     renderPreviewModal(char);
     const modal = document.getElementById("preview-modal");
     if (modal) {
@@ -549,6 +552,10 @@
     if (modal) {
       modal.classList.remove("is-open");
       modal.setAttribute("aria-hidden", "true");
+    }
+    if (previewModalTrigger && typeof previewModalTrigger.focus === "function") {
+      previewModalTrigger.focus();
+      previewModalTrigger = null;
     }
   }
 
@@ -740,6 +747,7 @@
   });
 
   const settingsModal = document.getElementById("settings-modal");
+  const btnSettings = document.getElementById("btn-settings");
   document.getElementById("btn-settings").addEventListener("click", function () {
     settingsModal.classList.add("is-open");
     settingsModal.setAttribute("aria-hidden", "false");
@@ -747,6 +755,7 @@
   function closeSettingsModal() {
     settingsModal.classList.remove("is-open");
     settingsModal.setAttribute("aria-hidden", "true");
+    if (btnSettings) btnSettings.focus();
   }
   document.getElementById("modal-close").addEventListener("click", closeSettingsModal);
   settingsModal.addEventListener("click", function (e) {
