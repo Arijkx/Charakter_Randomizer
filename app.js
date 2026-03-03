@@ -72,24 +72,12 @@
   ];
 
   const FRAMING_OPTIONS = [
-    { value: "Extreme Close-Up", desc: "Shows only a very small detail, e.g. an eye or a mouth. Intense and emotional." },
-    { value: "Close-Up", desc: "Full face in frame. Focus on expression and emotion." },
-    { value: "Medium Close-Up", desc: "Head to neck/shoulders. Common in interviews or dialogue." },
-    { value: "Bust Shot", desc: "Head to chest. Classic portrait format." },
-    { value: "Medium Shot", desc: "Head to about waist. Combination of person and some environment." },
-    { value: "Medium Full Shot", desc: "Person visible to about the hips. Body language becomes clear." },
-    { value: "American Shot", desc: "Person to the knees. Originates from Westerns (revolver should be visible)." },
-    { value: "Three-Quarter Shot", desc: "Framed between hip and knee." },
-    { value: "Full Shot", desc: "Entire person in frame. Environment plays a larger role." },
-    { value: "Long Shot", desc: "Person with lots of environment. Focus on spatial effect." },
-    { value: "Extreme Long Shot", desc: "Landscape dominates the image. Person appears small or secondary." },
-    { value: "Image Framing", desc: "The chosen area of the subject that is visible in the image." },
-    { value: "Framing / Cropping", desc: "Deliberate choice of image frame and crop." },
-    { value: "Cut-Off", desc: "Deliberate cropping of parts of the image at the edge." },
-    { value: "Composition", desc: "Arrangement of all elements in the image." },
-    { value: "Aspect Ratio", desc: "Ratio of width to height (e.g. 16:9, 4:3)." },
-    { value: "Perspective", desc: "Angle of view on the subject (e.g. bird's eye, worm's eye)." },
-    { value: "Shot Size", desc: "Umbrella term for the depicted proximity or distance of the subject." }
+    { value: "Bust Shot", desc: "Head down to chest. Classic portrait." },
+    { value: "Medium Shot", desc: "Head to waist. Person and a bit of the scene." },
+    { value: "Medium Full Shot", desc: "Person to the hips. You can see body language." },
+    { value: "American Shot", desc: "Person to the knees. Classic Western framing." },
+    { value: "Three-Quarter Shot", desc: "Person cut off between hip and knee." },
+    { value: "Full Shot", desc: "Whole person visible. Background matters more." }
   ];
   const FRAMING_VALUES = FRAMING_OPTIONS.map(o => o.value);
   const FRAMING_DESCRIPTIONS = Object.fromEntries(FRAMING_OPTIONS.map(o => [o.value, o.desc]));
