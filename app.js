@@ -22,6 +22,27 @@
   ];
   const GENDERS = ["Male", "Female"];
   const ARMOR_TYPES = ["Cloth", "Leather", "Mail", "Plate"];
+
+  /** WoW logic: armor tier by minimum level. Level and equipment are tied. */
+  const ARMOR_TIER_OPTIONS = [
+    { name: "Starter", minLevel: 1 },
+    { name: "Leveling", minLevel: 10 },
+    { name: "Dungeon Set 1", minLevel: 20 },
+    { name: "Dungeon Set 2", minLevel: 30 },
+    { name: "Tier 1", minLevel: 40 },
+    { name: "Tier 2", minLevel: 50 },
+    { name: "Tier 3", minLevel: 58 },
+    { name: "Tier 4", minLevel: 60 },
+    { name: "Tier 5", minLevel: 65 },
+    { name: "Tier 6", minLevel: 70 }
+  ];
+  const ALL_ARMOR_TIERS = ARMOR_TIER_OPTIONS.map(o => o.name);
+
+  function getArmorTiersForLevel(level) {
+    if (level == null || level < 1) return ALL_ARMOR_TIERS;
+    return ARMOR_TIER_OPTIONS.filter(t => t.minLevel <= level).map(t => t.name);
+  }
+
   const POSES = [
     "Standing, neutral", "Standing, combat ready", "Kneeling", "Sitting",
     "Running / in motion", "Jumping", "Victory pose (weapon raised)",
@@ -211,6 +232,7 @@
     set("Off-hand", get("select-nebenhand"));
     set("Armor", get("select-ruestung"));
     set("Level", get("select-level", true));
+    set("Armor Tier", get("select-armor-tier"));
     set("Pose", get("select-pose"));
     set("Background (complex)", get("select-hintergrund"));
     set("Background (simple)", get("select-hintergrund-simpel"));
@@ -221,13 +243,13 @@
 
   const EXCLUSION_KEYS = [
     "Faction", "Race", "Class", "Hair color", "Gender", "Weapon", "Off-hand",
-    "Armor", "Level", "Pose", "Background (complex)", "Background (simple)", "Mood", "Framing"
+    "Armor", "Level", "Armor Tier", "Pose", "Background (complex)", "Background (simple)", "Mood", "Framing"
   ];
   const EXCLUSION_SELECT_ID = {
     Faction: "exclude-fraktion", Race: "exclude-rasse", Class: "exclude-klasse",
     "Hair color": "exclude-haarfarbe", Gender: "exclude-geschlecht", Weapon: "exclude-waffe",
     "Off-hand": "exclude-nebenhand", Armor: "exclude-ruestung", Level: "exclude-level",
-    Pose: "exclude-pose", "Background (complex)": "exclude-hintergrund", "Background (simple)": "exclude-hintergrund-simpel", Mood: "exclude-stimmung", Framing: "exclude-framing"
+    "Armor Tier": "exclude-armor-tier", Pose: "exclude-pose", "Background (complex)": "exclude-hintergrund", "Background (simple)": "exclude-hintergrund-simpel", Mood: "exclude-stimmung", Framing: "exclude-framing"
   };
 
   function getExclusions() {
@@ -290,8 +312,17 @@
     const offhand = overrides["Off-hand"] && offhandPool.includes(overrides["Off-hand"])
       ? overrides["Off-hand"]
       : pick(offhandPool);
-    const levelPool = filterPool(Array.from({ length: 70 }, (_, i) => i + 1), excl.Level);
+    let levelPool = filterPool(Array.from({ length: 70 }, (_, i) => i + 1), excl.Level);
+    if (overrides["Armor Tier"] && !overrides.Level) {
+      const tierOpt = ARMOR_TIER_OPTIONS.find(t => t.name === overrides["Armor Tier"]);
+      if (tierOpt) levelPool = levelPool.filter(l => l >= tierOpt.minLevel);
+      if (levelPool.length === 0) levelPool = Array.from({ length: 70 }, (_, i) => i + 1);
+    }
     const level = overrides.Level >= 1 && overrides.Level <= 70 ? overrides.Level : pick(levelPool);
+    const armorTierPool = filterPool(getArmorTiersForLevel(level), excl["Armor Tier"]);
+    const armorTier = overrides["Armor Tier"] && armorTierPool.includes(overrides["Armor Tier"])
+      ? overrides["Armor Tier"]
+      : pick(armorTierPool);
     return {
       Faction: faction,
       Class: klasse,
@@ -301,6 +332,7 @@
       Weapon: weapon,
       "Off-hand": offhand,
       Armor: armor,
+      "Armor Tier": armorTier,
       Level: level,
       Pose: overrides.Pose && POSES.includes(overrides.Pose) ? overrides.Pose : pick(filterPool(POSES, excl.Pose)),
       ...pickOneBackground(overrides, excl),
@@ -353,6 +385,7 @@
       case "Off-hand": return ALL_OFFHANDS;
       case "Armor": return ARMOR_TYPES;
       case "Level": return Array.from({ length: 70 }, (_, i) => String(i + 1));
+      case "Armor Tier": return ALL_ARMOR_TIERS;
       case "Pose": return POSES;
       case "Background (complex)": return BACKGROUNDS;
       case "Background (simple)": return BACKGROUNDS_SIMPEL;
@@ -414,7 +447,7 @@
     const labelMap = {
       Faction: "Faction", Race: "Race", Class: "Class", "Hair color": "Hair color",
       Gender: "Gender", Weapon: "Weapon", "Off-hand": "Off-hand", Armor: "Armor",
-      Level: "Level", Pose: "Pose", "Background (complex)": "Background (complex)", "Background (simple)": "Background (simple)", Mood: "Mood", Framing: "Framing"
+      Level: "Level", "Armor Tier": "Armor Tier", Pose: "Pose", "Background (complex)": "Background (complex)", "Background (simple)": "Background (simple)", Mood: "Mood", Framing: "Framing"
     };
     EXCLUSION_KEYS.forEach(key => {
       const rowLabel = document.createElement("label");
@@ -450,6 +483,7 @@
     fillSelect("select-nebenhand", ALL_OFFHANDS);
     fillSelect("select-ruestung", ARMOR_TYPES);
     fillSelect("select-level", Array.from({ length: 70 }, (_, i) => String(i + 1)));
+    fillSelect("select-armor-tier", ALL_ARMOR_TIERS);
     fillSelect("select-pose", POSES);
     fillSelect("select-hintergrund", BACKGROUNDS);
     fillSelect("select-hintergrund-simpel", BACKGROUNDS_SIMPEL);
@@ -576,7 +610,7 @@
 
   const DISPLAY_KEY_MAP = {
     Fraktion: "Faction", Rasse: "Race", Klasse: "Class", Haarfarbe: "Hair color", Geschlecht: "Gender",
-    Waffe: "Weapon", Nebenhand: "Off-hand", Rüstung: "Armor", Level: "Level", Pose: "Pose",
+    Waffe: "Weapon", Nebenhand: "Off-hand", Rüstung: "Armor", Level: "Level", Tierrüstung: "Armor Tier", Pose: "Pose",
     "Hintergrund Komplex": "Background (complex)", "Hintergrund Simpel": "Background (simple)", Stimmung: "Mood", Bildauschnitt: "Framing"
   };
 
@@ -630,7 +664,7 @@
     Faction: "select-fraktion", Race: "select-rasse", Class: "select-klasse",
     "Hair color": "select-haarfarbe", Gender: "select-geschlecht", Weapon: "select-waffe",
     "Off-hand": "select-nebenhand", Armor: "select-ruestung", Level: "select-level",
-    Pose: "select-pose", "Background (complex)": "select-hintergrund", "Background (simple)": "select-hintergrund-simpel", Mood: "select-stimmung", Framing: "select-framing"
+    "Armor Tier": "select-armor-tier", Pose: "select-pose", "Background (complex)": "select-hintergrund", "Background (simple)": "select-hintergrund-simpel", Mood: "select-stimmung", Framing: "select-framing"
   };
 
   function getPresetsForStorage() {
@@ -652,7 +686,7 @@
 
   const LEGACY_SETTINGS_KEYS = {
     Faction: "Fraktion", Race: "Rasse", Class: "Klasse", "Hair color": "Haarfarbe", Gender: "Geschlecht",
-    Weapon: "Waffe", "Off-hand": "Nebenhand", Armor: "Rüstung", Level: "Level", Pose: "Pose",
+    Weapon: "Waffe", "Off-hand": "Nebenhand", Armor: "Rüstung", Level: "Level", "Armor Tier": "Tierrüstung", Pose: "Pose",
     "Background (complex)": "Hintergrund Komplex", "Background (simple)": "Hintergrund Simpel", Mood: "Stimmung", Framing: "Bildauschnitt"
   };
 
